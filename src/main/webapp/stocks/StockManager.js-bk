@@ -1,0 +1,121 @@
+import React, {Component} from 'react';
+import './App.css';
+
+
+export default class StockManager extends Component {
+  
+  constructor(props) {
+    super(props);
+    this.state = {
+      stockDetails: [],
+      ticker: '',
+      tickers: [],
+    };
+  }
+
+  componentDidMount() {
+    fetch("/StockTracker/timeseries")
+        .then(response => response.json())
+        .then(
+            (data) => {
+                this.setState({
+                  stockDetails: data
+                });
+            },
+            (error) => {
+              //alert(error);
+              //some code here to handle error;
+            }
+        )
+  }
+
+  handleChangeTicker = e => {
+    
+    this.setState({
+      ...this.state,
+      ticker: e.target.value,
+    })
+
+  }
+
+  handleClickAdd = () => {
+    const {tickers, ticker} = this.state;
+    tickers.push(ticker);
+    this.setState({
+      ...this.state,
+      tickers,
+    })
+
+  }
+
+  render () {
+    const {title} = this.props;
+    const {stockDetails, tickers} = this.state;
+    const hasStockDetail = (stockDetails && stockDetails.length > 0) || false;
+    return (
+      <div className="App">
+        <header className="App-header">
+          <div>
+            <input onChange={this.handleChangeTicker} value={this.state.ticker} type="text" className="form-control" id="inputTicker" placeholder="add ticker here"/>
+            <button type="button" onClick={this.handleClickAdd} style={{marginTop: "25px"}} className="btn btn-add">Add Ticker</button>
+          </div>
+          <p>
+           { hasStockDetail ? '' : "Loading........"}
+          </p>
+          <h1 className = "text-center"> {title}</h1>
+          <table className = "table table-striped">
+                <thead>
+                    <tr>
+                        <th>Ticker</th>
+                        <th> Date/Time</th>
+                        <th> Open</th>
+                        <th> Close</th>
+                        <th> High</th>
+                        <th> Low</th>
+                    </tr>
+
+                </thead>
+               {tickers && tickers.length > 0 &&(<tbody>
+                    {
+                        tickers.map(
+                                ticker =>
+                                <tr>
+                                    <td> {ticker }</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>    
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+
+                        )
+                    }
+
+                </tbody>)}
+               {hasStockDetail && (<tbody>
+                    {
+                        hasStockDetail.map(
+                                row =>
+                                <tr key = {row.id}>
+                                    <td> {row.ticker }</td>
+                                    <td> {row.date }</td>
+                                    <td> {row.open }</td>
+                                    <td> {row.close }</td>    
+                                    <td> {row.high }</td>
+                                    <td> {row.low }</td>
+                                </tr>
+
+                        )
+                    }
+
+                </tbody>)}
+
+
+            </table>
+         
+        </header>
+      </div>
+    );
+  }
+}
+

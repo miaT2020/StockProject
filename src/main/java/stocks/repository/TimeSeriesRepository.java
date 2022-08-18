@@ -11,4 +11,11 @@ import stocks.domain.TimeSeries;
 @Repository
 public interface TimeSeriesRepository extends JpaRepository<TimeSeries, Long>{
 	List<TimeSeries> findByStock(StockObject stock);
+	
+	void deleteByStock(StockObject stock);
+
+	//void deleteByStock(Iterable<StockObject> stocks);
+
+	 
+	//void deleteByStocks(Iterable<StockObject> stocks);
 }

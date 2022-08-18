@@ -69,25 +69,27 @@ public class Main {
     @Bean
     CommandLineRunner stockRunner(StockRepository stockRepository, TimeSeriesRepository timeSeriesRepository) {
 		return args -> {
-			
-			String[] tickers = {"GOOG", "AAPL", "AA"};
-			StockService stockService = new StockService(stockRepository);
-			TimeSeriesService timeSeriesService = new TimeSeriesService(timeSeriesRepository, stockRepository);
-			
-			ArrayList<TimeSeriesBean> timeSeriesList = new ArrayList<>();
-			List<StockObject> stocks = stockService.createStocks(tickers);
-			List<TimeSeries> tsList = timeSeriesService.createTimeSeries(stocks);
-			
-			
-			for (TimeSeries ts : tsList) {
-				  TimeSeriesBean timeSeriesBean = new TimeSeriesBean();
-		       	  timeSeriesBean.setId(ts.getId());
-		       	  timeSeriesBean.setTicker(ts.getStock().getTicker());
-		       	  timeSeriesBean.setDisplayText(ts.getStock().getTicker() + " (" + ts.getStock().getCompanyName() + ")");
-		       	  timeSeriesList.add(timeSeriesBean);
-		       	 
-				}
-			
+//			
+//			String[] tickers = {"TSLA",	"F"};
+//			StockService stockService = new StockService(stockRepository);
+//			//stockService.deleteStocks(tickers);
+//			TimeSeriesService timeSeriesService = new TimeSeriesService(timeSeriesRepository, stockRepository);
+//			List<TimeSeries> t = timeSeriesService.createTimeSeries(tickers);
+//			
+//			ArrayList<TimeSeriesBean> timeSeriesList = new ArrayList<>();
+//			List<StockObject> stocks = stockService.createStocks(tickers);
+//			List<TimeSeries> tsList = timeSeriesService.createTimeSeries(stocks);
+//			
+//			
+//			for (TimeSeries ts : tsList) {
+//				  TimeSeriesBean timeSeriesBean = new TimeSeriesBean();
+//		       	  timeSeriesBean.setId(ts.getId());
+//		       	  timeSeriesBean.setTicker(ts.getStock().getTicker());
+//		       	  timeSeriesBean.setDisplayText(ts.getStock().getTicker() + " (" + ts.getStock().getCompanyName() + ")");
+//		       	  timeSeriesList.add(timeSeriesBean);
+//		       	 
+//				}
+//			
 			
 //			for(int i = 0; i < StockReader.stocks.size(); i++) {
 //				StockObject currentStock = new StockObject(StockReader.stocks.get(i).getTicker());

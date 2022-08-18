@@ -4,6 +4,7 @@ package stocks.service;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -82,11 +83,14 @@ public class StockService {
 		return savedStocks;
 	}
 	
-	public List<StockObject> deleteStocks(String[] tickers) {
+	public void deleteStocks(String[] tickers) {
+//		Iterable<String> iterableTicker = Arrays.asList(tickers);
+//		stockRepository.deleteByTicker(iterableTicker);
 		for(String ticker : tickers) {
-			//stockRepository.deleteByTicker(ticker);
+			stockRepository.deleteByTicker(ticker);
+			
 		}
-		return stockRepository.findAll();
+		
 	}
 
 	public List<StockObject> getAllSymbols() {

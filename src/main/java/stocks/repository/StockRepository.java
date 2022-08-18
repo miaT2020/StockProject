@@ -1,4 +1,6 @@
 package stocks.repository;
+import java.util.Iterator;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -8,5 +10,11 @@ import stocks.domain.StockObject;
 public interface StockRepository extends JpaRepository<StockObject, Long>{
 
 	StockObject findByTicker(String ticker);
-	long deleteByTicker(String ticker);
+	void deleteByTicker(String ticker);
+	
+	//Iterable<StockObject> findByTickers(Iterable<String> tickers);
+	
+	//Iterable<StockObject> findByTicker(Iterable<String> iterableTicker);
+	
+	//void deleteByTicker(Iterable<String> iterableTicker);
 }

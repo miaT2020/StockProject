@@ -1,0 +1,75 @@
+
+
+[ {
+  "id" : 2101,
+  "date" : "2022-08-12",
+  "ticker" : "AMZN",
+  "openPrice" : "142.13",
+  "closePrice" : "143.55",
+  "highPrice" : "143.57001",
+  "lowPrice" : "140.125",
+  "companyName" : ""
+}, {
+  "id" : 2102,
+  "date" : "2022-08-11",
+  "ticker" : "AMZN",
+  "openPrice" : "143.86",
+  "closePrice" : "140.64",
+  "highPrice" : "144.49001",
+  "lowPrice" : "139.75999",
+  "companyName" : ""
+}, {
+  "id" : 2103,
+  "date" : "2022-08-10",
+  "ticker" : "AMZN",
+  "openPrice" : "142.89999",
+  "closePrice" : "142.69",
+  "highPrice" : "144.60001",
+  "lowPrice" : "141.00999",
+  "companyName" : ""
+}, {
+  "id" : 0,
+  "date" : "",
+  "ticker" : "XOM",
+  "openPrice" : "0.0",
+  "closePrice" : "0.0",
+  "highPrice" : "0.0",
+  "lowPrice" : "0.0",
+  "companyName" : ""
+}, {
+  "id" : 2101,
+  "date" : "2022-08-12",
+  "ticker" : "AMZN",
+  "openPrice" : "142.13",
+  "closePrice" : "143.55",
+  "highPrice" : "143.57001",
+  "lowPrice" : "140.125",
+  "companyName" : ""
+}, {
+  "id" : 2102,
+  "date" : "2022-08-11",
+  "ticker" : "AMZN",
+  "openPrice" : "143.86",
+  "closePrice" : "140.64",
+  "highPrice" : "144.49001",
+  "lowPrice" : "139.75999",
+  "companyName" : ""
+}, {
+  "id" : 2103,
+  "date" : "2022-08-10",
+  "ticker" : "AMZN",
+  "openPrice" : "142.89999",
+  "closePrice" : "142.69",
+  "highPrice" : "144.60001",
+  "lowPrice" : "141.00999",
+  "companyName" : ""
+}, {
+  "id" : 0,
+  "date" : "",
+  "ticker" : "DOW",
+  "openPrice" : "0.0",
+  "closePrice" : "0.0",
+  "highPrice" : "0.0",
+  "lowPrice" : "0.0",
+  "companyName" : ""
+} ]

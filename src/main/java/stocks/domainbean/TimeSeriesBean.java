@@ -11,6 +11,7 @@ public class TimeSeriesBean {
  private String highPrice;
  private String lowPrice;
  private String displayText;
+ private String companyName;
  
 	public long getId() {
 		return id;
@@ -57,5 +58,11 @@ public class TimeSeriesBean {
 	public void setDisplayText(String displayText) {
 		this.displayText = displayText;
 		
+	}
+	public String getCompanyName() {
+		return companyName;
+	}
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
 	}
 }

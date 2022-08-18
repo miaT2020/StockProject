@@ -3,9 +3,12 @@ package stocks.service;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
+import java.util.Date;
+import java.text.SimpleDateFormat;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -14,22 +17,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import stocks.repository.StockRepository;
 import stocks.repository.TimeSeriesRepository;
+import stocks.repository.TimeSeriesUpdateRepository;
 import stocks.service.StockService;
 import stocks.domain.TimeSeries;
+import stocks.domain.TimeSeriesUpdate;
 import stocks.domainbean.TimeSeriesBean;
 import stocks.Main;
+
 import stocks.domain.Client;
 import stocks.domain.StockObject;
 
 public class TimeSeriesService {
 	private final TimeSeriesRepository timeSeriesRepository;
 	private final StockRepository stockRepository;
-	//private final StockService stockService;
+    private final TimeSeriesUpdateRepository timeSeriesUpdateRepository;
 	
 	@Autowired
-	public TimeSeriesService(TimeSeriesRepository timeSeriesRepository, StockRepository stockRepository) {
+	public TimeSeriesService(TimeSeriesRepository timeSeriesRepository, StockRepository stockRepository, TimeSeriesUpdateRepository timeSeriesUpdateRepository) {
 		this.timeSeriesRepository = timeSeriesRepository;
 		this.stockRepository = stockRepository;
+		this.timeSeriesUpdateRepository = timeSeriesUpdateRepository;
 	
 	}
 	
@@ -51,34 +58,40 @@ public class TimeSeriesService {
 		return timeSeriesRepository.findAll();
 	}
 
-	public List<TimeSeries> createTimeSeries(List<StockObject> stocks) {
+	public List<TimeSeries> createTimeSeries(String[] tickers) {
 	
 		try {
 			int counter = 1; //NOPMD
-			for(StockObject currentStock : stocks){
-				String ticker = currentStock.getTicker();
+			for(String ticker : tickers) {
+				StockObject stock = stockRepository.findByTicker(ticker);
+				if(stock == null) {
+					stock = stockRepository.save(new StockObject(ticker, ""));
+				}
 				
-	    		obtainTimeSeries(ticker, currentStock);
-	    		if(counter%4 == 0 && counter < stocks.size()) {
+	    		obtainTimeSeries(ticker, stock);
+	    		if(counter%4 == 0 && counter < tickers.length) {
 					TimeUnit.MINUTES.sleep(1);
 				}
 	    		counter++;
+	    		
+//	    		long unpdateTime = System.currentTimeMillis();
+//	    		TimeSeriesUpdate lastTimeUpdate = new TimeSeriesUpdate(stock,  unpdateTime);
+//	    		timeSeriesUpdateRepository.save(lastTimeUpdate);
+//	    		SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy HH:mm");    
+//	    		Date resultdate = new Date(unpdateTime);
+//	    		System.out.println(sdf.format(resultdate));
 	    	}
 		} catch (Exception e) {
-			System.out.println("error");
+			System.out.println(e.getMessage());
 		}
 
-		ArrayList<TimeSeries> tsList = new ArrayList<>();
 		
-		for(StockObject stock : stocks) {
-			
-			tsList.addAll(timeSeriesRepository.findByStock(stock));
-		}
 		
-		return tsList;
+		return fetchTimeSeriesByTickers(tickers);
 		
 	}
 	
+		
 	private void obtainTimeSeries(String ticker, StockObject currentStock) throws Exception{
 		Client c = new Client();
 		c.initParams();
@@ -119,8 +132,98 @@ public class TimeSeriesService {
         connection.disconnect();
 	}
 
-	public List<TimeSeries> fetchAvailableStocks() {
-		return timeSeriesRepository.findAll();
+//	public List<TimeSeries> fetchAvailableStocks() {
+//		return timeSeriesRepository.findAll();
+//		
+//	}
+
+	public void deleteTimeSeries() {
+		timeSeriesRepository.deleteAll();
 		
 	}
+	
+	public boolean deleteTimeSeriesByStocks(String[] tickers) {
+
+		for(String ticker : tickers) {
+			StockObject stock = stockRepository.findByTicker(ticker);
+			if(stock != null){
+				List<TimeSeries> ts = timeSeriesRepository.findByStock(stock);
+				for (TimeSeries timeSeries : ts) {
+					timeSeriesRepository.deleteById(timeSeries.getId());
+				}
+				
+				stockRepository.deleteById(stock.getId());
+			}
+		}
+		return true;
+	
+	}
+		
+
+	public List<TimeSeries> fetchTimeSeriesByTickers(String[] tickers) {
+		List<TimeSeries> timeSeries = new ArrayList<TimeSeries>();
+		for(String ticker : tickers) {
+			StockObject stock = stockRepository.findByTicker(ticker);
+			
+			if(stock != null) {
+				List<TimeSeries> ts = timeSeriesRepository.findByStock(stock);
+				timeSeries.addAll(ts);
+				
+			}
+			else {
+				StockObject newStock = stockRepository.save(new StockObject(ticker, ""));
+				TimeSeries t = new TimeSeries();
+				t.setStock(newStock);
+				timeSeries.add(t);
+			}
+			
+			
+		
+		}
+		return timeSeries;
+	}
+
+	
+	public List<TimeSeries> fetchStocks(String[] tickers) throws Exception{
+		
+		List<TimeSeries> result= new ArrayList<TimeSeries>();
+
+		List<TimeSeries> timeSeries = createTimeSeries(tickers);
+		for(String ticker : tickers){
+			StockObject stock = stockRepository.findByTicker(ticker);
+			
+			if(stock != null) {
+				List<TimeSeries> ts = timeSeriesRepository.findByStock(stock);
+				timeSeries.addAll(ts);
+				
+			}
+			else {
+				StockObject newStock = stockRepository.save(new StockObject(ticker, ""));
+				TimeSeries t = new TimeSeries();
+				t.setStock(newStock);
+				timeSeries.add(t);
+			}
+			
+			
+			if(stockRepository.findByTicker(ticker) != null){
+				List<TimeSeries> ts = timeSeriesRepository.findByStock(stock);
+				result.addAll(ts);
+			}
+		}
+		return result;
+	}
+
+	public boolean isUpdated() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	
+//	public void deleteTimeSeriesByStocks(String[] tickers) {
+//		Iterable<String> iterableTicker = Arrays.asList(tickers);
+//		
+//		Iterable<StockObject> stocks = stockRepository.findByTicker(iterableTicker);
+//		timeSeriesRepository.deleteByStock(stocks);
+//		
+//	}
 }

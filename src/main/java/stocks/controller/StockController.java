@@ -75,11 +75,11 @@ public class StockController {
 		return stockRepository.findAll();
 	}
 	
-	@DeleteMapping("/deletestocks")
-	public List<StockObject> deleteStocks(@RequestBody String[] tickers) {
-		return stockService.deleteStocks(tickers);
-		
-	}
+//	@DeleteMapping("/deletestocks")
+//	public List<StockObject> deleteStocks(@RequestBody String[] tickers) {
+//		return stockService.deleteStocks(tickers);
+//		
+//	}
 	
 
 	

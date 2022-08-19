@@ -15,17 +15,13 @@ export default class StorckManager  extends Component{
 
     this.state = {
       stockDetails: [],
-
-     // testData:  rows.flatMap(item => item),
+      data:  null,
       ticker: '',
       tickers: [],
       avaialbeTickers: stockList,
       tickerList: [],
       selectedOption: null,
       message:'', 
-      collapse: false,
-      trShow: false,
-      
       requestInput: {
                       interval: 1,
                       timeUnit: 'day',
@@ -49,8 +45,19 @@ export default class StorckManager  extends Component{
               //some code here to handle error;
             }
         )
-
   }
+
+  // componentDidUpdate = (prevProps, prevState) => {
+  //   const {data} = this.state;
+  //   if(!data && prevState.data !== data) {
+  //     const formatedData = this.mapStockDetail(data, 'ticker');
+  //     const tableData = Object.entries(formatedData);
+    
+  //     this.setState({
+  //       stockDetails: tableData
+  //     })
+  //   }
+  // } 
 
   toggle() {
     const {trShow} = this.state;
@@ -66,7 +73,7 @@ export default class StorckManager  extends Component{
   
       if (!acc[key]) {
   
-        acc[key] = [{ticker: key, isParent: true}];
+        acc[key] = [];
   
       }
   
@@ -145,7 +152,7 @@ export default class StorckManager  extends Component{
       })
       .then(res => res.json())
       .then( data => this.setState({
-        stockDetails: data,
+        data,
         message: "successed"
       })) // the data
       .catch(error => this.setState({
@@ -170,14 +177,12 @@ export default class StorckManager  extends Component{
         return res
     })
     .then(res => res.json())
-    .then(data => {
-      const formatedData = this.mapStockDetail(data, 'ticker');
-      const rows = formatedData ? Object.values(formatedData) : [];
-     
-      this.setState({
-      stockDetails: rows.flatMap(item => item),
-      
-    })})
+    .then(data => {    
+        const formatedData = this.mapStockDetail(data, 'ticker');
+        const tableData = Object.entries(formatedData);
+        
+        this.setState({stockDetails: tableData});  
+    })
     .catch(error => console.log(error)) // error handling
     /* .catch handles a failure with fetch (e.g. syntax error, no internet connection) */ 
   }
@@ -266,13 +271,13 @@ export default class StorckManager  extends Component{
       .then(res => res.json())
       .then( data => {
           const formatedData = this.mapStockDetail(data, 'ticker');
-          const rows = formatedData ? Object.values(formatedData) : [];
-        
+          const tableData = Object.entries(formatedData);
+          
           this.setState({
-          message: "update successed",
-          stockDetails: rows.flatMap(item => item),
-        })}
-      ) // the data
+            stockDetails: tableData,
+            message: "update successed"
+          });  
+      })
       .catch(error => this.setState({
         message: 'Delete failed'}));    
 
@@ -281,14 +286,9 @@ export default class StorckManager  extends Component{
 
   render()  {
     const {title} = this.props;
-    const {ticker, tickers, stockDetails, message, avaialbeTickers,   selectedOption, tickerList, trShow} = this.state;
+    const { stockDetails, message, avaialbeTickers,   selectedOption, tickerList} = this.state;
 
-    // const SingleValue = ({ children, ...props }) => (
-    //   <components.SingleValue {...props}>
-    //     {children}
-    //   </components.SingleValue>
-    // );
-    
+        
     return (
             <div className="flex-container">
               <div className="flex-item-left">
@@ -327,12 +327,42 @@ export default class StorckManager  extends Component{
                <div class="flex-item-right">
                   <h1 className="title-center">{title}</h1>
                   <button className="add-ticker-button" onClick={this.handleClickUpdate}>Realtime Update</button>
-
+              
                   
+                    {stockDetails.map(([key, value]) => 
+                    <div className="pofolio-container">
+                        <h2 >{key}</h2>  
+                        <table className="stockDetail">
+                          <thead>
+                         
+                            <th>Date/Time</th>
+                            <th>Open Price</th>
+                            <th>Close Price</th>
+                            <th>Highest Price</th>
+                            <th>Lowest Price</th>
+                          </thead>
+                        {value.map(row => 
+                          <tbody>
+                            <tr >
+                               
+                                <td> {row.date }</td>
+                                <td> {row.openPrice }</td>
+                                <td> {row.closePrice }</td>    
+                                <td> {row.highPrice }</td>
+                                <td> {row.lowPrice }</td>
+                            </tr>
+                            </tbody>)}
+                        </table>
+                      </div>)
+                     } 
+                      
+                
 
+                
+                {/* {stockDetails && stockDetails.length > 0 &&(  stockDetails.map(  ticker => 
 
-                    <table className="stockDetail">
-                      <thead>
+                <table className="stockDetail">
+                      {ticker.isParent && <thead>
                         <th />
                         <th>Ticker</th>
                         <th>Date/Time</th>
@@ -340,14 +370,13 @@ export default class StorckManager  extends Component{
                         <th>Close Price</th>
                         <th>Highest Price</th>
                         <th>Lowest Price</th>
-                      </thead>
+                      </thead>}
                    
-                      {stockDetails && stockDetails.length > 0 &&(<tbody>
-                          {
-                              stockDetails.map(
-                                      ticker =>
-                                      <Fragment>
-                                        {ticker.isParent && <tr >
+                     <tbody>
+                          
+                            
+                                  
+                                        {ticker.isParent && <tr>
                                           <th scope="row" onClick={this.toggle}>
                                                 <i className={trShow ? "arrow down" : "arrow right"} />
                                           </th>                                        
@@ -373,11 +402,11 @@ export default class StorckManager  extends Component{
                                             <td> {ticker.highPrice }</td>
                                             <td> {ticker.lowPrice }</td>
                                         </tr>)}
-                                      </Fragment>)
-                          }
+                                     
+                          
 
-                      </tbody>)}
-                    </table>
+                      </tbody>
+                    </table>))} */}
                   
                 </div>              
             

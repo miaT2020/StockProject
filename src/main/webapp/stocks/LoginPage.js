@@ -90,7 +90,7 @@ export default class LoginPage extends Component {
                     </div>
 
                 </div>)}
-                {this.state.showSuccessMessage &&  <StockManager title="Stocks Manager"/>}
+                {this.state.showSuccessMessage &&  <StockManager title="Stock Market Performence Pofolio"/>}
             </>
         );
     }

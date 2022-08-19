@@ -73,3 +73,34 @@
   "lowPrice" : "0.0",
   "companyName" : ""
 } ]
+
+
+{
+  "AMZon" : [{
+    "id" : 2103,
+    "date" : "2022-08-10",
+    "ticker" : "AMZN",
+    "openPrice" : "142.89999",
+    "closePrice" : "142.69",
+    "highPrice" : "144.60001",
+    "lowPrice" : "141.00999",
+    "companyName" : ""
+  },
+  {
+    "id" : 2103,
+    "date" : "2022-08-10",
+    "ticker" : "AMZN",
+    "openPrice" : "142.89999",
+    "closePrice" : "142.69",
+    "highPrice" : "144.60001",
+    "lowPrice" : "141.00999",
+    "companyName" : ""
+  }],
+
+  "DOW": [
+    {}, {} 
+  ]
+
+  }
+
+}
